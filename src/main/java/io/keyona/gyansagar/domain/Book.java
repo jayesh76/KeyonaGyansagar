@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.Optional;
 
 @Entity
 public class Book {
@@ -43,7 +42,7 @@ public class Book {
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date updated_At;
 	private String author;
-	   
+	private String comments;
 
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "book")
 	@JsonIgnore
@@ -237,6 +236,34 @@ public class Book {
 	
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	
+	/**
+	 * @return the comments
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@PrePersist

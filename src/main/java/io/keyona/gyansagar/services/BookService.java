@@ -1,10 +1,14 @@
 package io.keyona.gyansagar.services;
 
 import io.keyona.gyansagar.domain.BookBlob;
+import io.keyona.gyansagar.domain.User;
 import io.keyona.gyansagar.domain.Book;
 import io.keyona.gyansagar.exceptions.BookNameException;
+import io.keyona.gyansagar.exceptions.BookNotFoundException;
+import io.keyona.gyansagar.exceptions.ProjectNotFoundException;
 import io.keyona.gyansagar.repositories.BookBlobRepository;
 import io.keyona.gyansagar.repositories.BookRepository;
+import io.keyona.gyansagar.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -14,17 +18,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookService {
 
-    @Autowired
+	@Autowired
+	private UserRepository userRepository;
+	    
+	@Autowired
     private BookRepository bookRepository;
     
     @Autowired
     private BookBlobRepository bookBlobRepository;
 
-    public Book saveOrUpdateBook(Book book){
+    public Book saveOrUpdateBook(Book book, String userName){
+    	
+    /*	 if(book.getId() != null){
+    		 Book  existingBook = findBookById(book.getId());
+             if(!existingBook.getAuthor().equals(userName)){
+                 throw new BookNotFoundException("Book not found in your account");
+             }
+         }  */
         try{
-        	
-            book.setBookName(book.getBookName().toUpperCase());
-
+        	 User user = userRepository.findByUsername(userName);
+             book.setUser(user);
+             book.setAuthor(user.getUsername());             
+        	 book.setBookName(book.getBookName().toUpperCase());
         	 if(book.getId()==null){
         		 BookBlob bookBlob = new BookBlob ();
                  book.setBookBlob(bookBlob);
@@ -32,17 +47,14 @@ public class BookService {
                  bookBlob.setShlok(book.getShlok());
         		 bookBlob.setEvent(book.getEvent());
              };
-
              if(book.getId()!=null){
             	 bookBlobRepository.findByBook(book).setEvent(book.getEvent());
             	 bookBlobRepository.findByBook(book).setShlok(book.getShlok());
              }
-             
             return bookRepository.save(book);
         }catch (Exception e){
             throw new BookNameException("Book Name '"+book.getBookName().toUpperCase()+"' already exists");
         }
-
     }
 
 
@@ -86,6 +98,9 @@ public class BookService {
     }
     public Iterable<Book> findAllBooksByVillage(String village){
         return bookRepository.findAllByVillage(village);
+    }
+    public Iterable<Book> findAllBooksByAuthor(String userName){
+        return bookRepository.findAllByAuthor(userName);
     }
 
     public void deleteBookById(Long id){

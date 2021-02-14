@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 @RestController
@@ -29,12 +31,15 @@ public class BookController {
 
 
     @PostMapping("")
-    public ResponseEntity<?> createNewBook(@Valid @RequestBody Book book, BindingResult result){
+    public ResponseEntity<?> createNewBook(@Valid @RequestBody Book book, BindingResult result, Principal principal){
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap!=null) return errorMap;
+        
+        System.out.println("principal.getName(): "+principal.getName());
+        System.out.println("BOOK: "+book.getId());
 
-        Book book1 = bookService.saveOrUpdateBook(book);
+        Book book1 = bookService.saveOrUpdateBook(book, principal.getName());
         return new ResponseEntity<Book>(book1, HttpStatus.CREATED);
     }
 
@@ -60,6 +65,9 @@ public class BookController {
     @GetMapping("/all")
     public Iterable<Book> getAllBooks(){return bookService.findAllBooks();}
     
+    @GetMapping("/allBooks")
+    public Iterable<Book> getAllBooksByAuthor(Principal principal){return bookService.findAllBooksByAuthor(principal.getName());}
+    
     @GetMapping("/name/{bookName}")
     public Iterable<Book> getAllBooksByName(@PathVariable String bookName){
     	return bookService.findAllBooksByName(bookName);
@@ -79,8 +87,7 @@ public class BookController {
     public Iterable<Book> getAllBooksByVillage(@PathVariable String village){
     	return bookService.findAllBooksByVillage(village);
     }
-   
-
+    
     @DeleteMapping("/{bookId}")
     public ResponseEntity<?> deleteBook(@PathVariable Long bookId){
         bookService.deleteBookById(bookId);
