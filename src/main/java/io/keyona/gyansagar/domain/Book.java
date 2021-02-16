@@ -20,6 +20,7 @@ public class Book {
 	private String bookEdition;
 	private String pageNumber;
 	private String subject;
+	private String subSubject;
 	@Transient
     private String shlok;
 	@Transient
@@ -250,6 +251,19 @@ public class Book {
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	/**
+	 * @return the subSubject
+	 */
+	public String getSubSubject() {
+		return subSubject;
+	}
+
+	/**
+	 * @param subSubject the subSubject to set
+	 */
+	public void setSubSubject(String subSubject) {
+		this.subSubject = subSubject;
 	}
 
 	/**
