@@ -100,6 +100,7 @@ public class BookService {
         return bookRepository.findAllByVillage(village);
     }
     public Iterable<Book> findAllBooksByUser(String userName){
+        System.out.println("userName: "+userName);
         return bookRepository.findAllByOperator(userName);
     }
     public Iterable<Book> findAllBooksByAuthor(String author){
