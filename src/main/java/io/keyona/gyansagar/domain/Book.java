@@ -43,6 +43,7 @@ public class Book {
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date updated_At;
 	private String author;
+	private String operator;
 	private String comments;
 
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "book")
@@ -279,7 +280,13 @@ public class Book {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public String getOperator() {
+		return operator;
+	}
 
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
 	@PrePersist
 	protected void onCreate() {
 		this.created_At = new Date();

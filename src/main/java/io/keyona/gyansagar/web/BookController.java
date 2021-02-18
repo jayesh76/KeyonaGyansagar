@@ -35,9 +35,6 @@ public class BookController {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap!=null) return errorMap;
-        
-        System.out.println("principal.getName(): "+principal.getName());
-        System.out.println("BOOK: "+book.getId());
 
         Book book1 = bookService.saveOrUpdateBook(book, principal.getName());
         return new ResponseEntity<Book>(book1, HttpStatus.CREATED);
@@ -66,7 +63,7 @@ public class BookController {
     public Iterable<Book> getAllBooks(){return bookService.findAllBooks();}
     
     @GetMapping("/allBooks")
-    public Iterable<Book> getAllBooksByAuthor(Principal principal){return bookService.findAllBooksByAuthor(principal.getName());}
+    public Iterable<Book> getAllBooksByAuthor(Principal principal){return bookService.findAllBooksByUser(principal.getName());}
     
     @GetMapping("/name/{bookName}")
     public Iterable<Book> getAllBooksByName(@PathVariable String bookName){
@@ -81,6 +78,11 @@ public class BookController {
     @GetMapping("/actor/{actor}")
     public Iterable<Book> getAllBooksByActor(@PathVariable String actor){
     	return bookService.findAllBooksByActor(actor);
+    }
+
+    @GetMapping("/author/{author}")
+    public Iterable<Book> getAllBooksByAuthor(@PathVariable String author){
+        return bookService.findAllBooksByAuthor(author);
     }
     
     @GetMapping("/village/{village}")

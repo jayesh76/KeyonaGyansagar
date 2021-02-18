@@ -38,7 +38,7 @@ public class BookService {
         try{
         	 User user = userRepository.findByUsername(userName);
              book.setUser(user);
-             book.setAuthor(user.getUsername());             
+             book.setOperator(user.getUsername());
         	 book.setBookName(book.getBookName().toUpperCase());
         	 if(book.getId()==null){
         		 BookBlob bookBlob = new BookBlob ();
@@ -99,8 +99,11 @@ public class BookService {
     public Iterable<Book> findAllBooksByVillage(String village){
         return bookRepository.findAllByVillage(village);
     }
-    public Iterable<Book> findAllBooksByAuthor(String userName){
-        return bookRepository.findAllByAuthor(userName);
+    public Iterable<Book> findAllBooksByUser(String userName){
+        return bookRepository.findAllByOperator(userName);
+    }
+    public Iterable<Book> findAllBooksByAuthor(String author){
+        return bookRepository.findAllByAuthor(author);
     }
 
     public void deleteBookById(Long id){

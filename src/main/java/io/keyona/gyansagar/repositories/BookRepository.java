@@ -22,4 +22,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Iterable<Book> findAllByVillage(String village);
     
     Iterable<Book> findAllByAuthor(String author);
+    Iterable<Book> findAllByOperator(String operator);
+
 }
