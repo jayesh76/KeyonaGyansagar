@@ -63,7 +63,7 @@ public class BookController {
     @GetMapping("/all")
     public Iterable<Book> getAllBooks(){return bookService.findAllBooks();}
     
-    @GetMapping("/allBooks")
+    @GetMapping("/allMyBooks")
     public Iterable<Book> getAllBooksByUser(Principal principal){return bookService.findAllBooksByUser(principal.getName());}
     
     @GetMapping("/name/{bookName}")
