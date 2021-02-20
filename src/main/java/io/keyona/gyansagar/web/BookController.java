@@ -17,6 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/book")
+@CrossOrigin
 public class BookController {
 
     @Autowired
