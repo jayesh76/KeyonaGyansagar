@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -28,19 +29,19 @@ public class Book {
 	private String reference;
 	private String actor;
 	private String village;
-	@JsonFormat(pattern = "yyyy-mm-dd")
+	@JsonFormat(pattern = "dd-MMM-yyyy")
 	private Date eventDate;
-	@JsonFormat(pattern = "yyyy-mm-dd")
+	@JsonFormat(pattern = "dd-MMM-yyyy")
 	private Date birthDate;
-	@JsonFormat(pattern = "yyyy-mm-dd")
+	@JsonFormat(pattern = "dd-MMM-yyyy")
 	private Date deathDate;
 	private String eventDateGuj;
 	private String birthDateGuj;
 	private String deathDateGuj;
-	@JsonFormat(pattern = "yyyy-mm-dd")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	@Column(updatable = false)
 	private Date created_At;
-	@JsonFormat(pattern = "yyyy-mm-dd")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private Date updated_At;
 	private String author;
 	private String operator;
@@ -166,29 +167,6 @@ public class Book {
 		this.village = village;
 	}
 
-	public Date getEventDate() {
-		return eventDate;
-	}
-
-	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
-	}
-
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public Date getDeathDate() {
-		return deathDate;
-	}
-
-	public void setDeathDate(Date deathDate) {
-		this.deathDate = deathDate;
-	}
 
 	public String getEventDateGuj() {
 		return eventDateGuj;
@@ -235,7 +213,30 @@ public class Book {
 		return author;
 	}
 
-	
+
+	public Date getEventDate() {
+		return eventDate;
+	}
+
+	public void setEventDate(Date eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public Date getDeathDate() {
+		return deathDate;
+	}
+
+	public void setDeathDate(Date deathDate) {
+		this.deathDate = deathDate;
+	}
 	public void setAuthor(String author) {
 		this.author = author;
 	}
