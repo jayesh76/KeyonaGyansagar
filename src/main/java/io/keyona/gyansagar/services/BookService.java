@@ -10,9 +10,15 @@ import io.keyona.gyansagar.repositories.BookBlobRepository;
 import io.keyona.gyansagar.repositories.BookRepository;
 import io.keyona.gyansagar.repositories.UserRepository;
 
+import java.util.Iterator;
 import java.util.Optional;
-
+import java.util.List;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,6 +32,7 @@ public class BookService {
     
     @Autowired
     private BookBlobRepository bookBlobRepository;
+
 
     public Book saveOrUpdateBook(Book book, String userName){
     	
@@ -81,12 +88,36 @@ public class BookService {
         }
         return bookBlob.get();
     }
-    
 
-    public Iterable<Book> findAllBooks(){
-        return bookRepository.findAll();
+    public List<Book> findBooksForPrint(Iterable<Long> iterableIds){
+        List<Book> bookList = new ArrayList<Book>();
+
+        for (Book book : bookRepository.findAllById(iterableIds)){
+            Optional<BookBlob> bookBlob = bookBlobRepository.findById(book.getId());
+            if(bookBlob != null){
+                book.setEvent(bookBlob.get().getEvent());
+                book.setShlok(bookBlob.get().getShlok());
+            }
+            bookList.add(book);
+        }
+
+        return bookList;
     }
-    
+
+    public Iterable<Book> findAllBooks(Integer pageNo, Integer pageSize, String sortBy){
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Book> pagedResult = bookRepository.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Book>();
+        }
+    }
+    public Iterable<Book> findAllBooksByIds(String bookName){
+        return bookRepository.findAllByBookName(bookName);
+    }
     public Iterable<Book> findAllBooksByName(String bookName){
         return bookRepository.findAllByBookName(bookName);
     }

@@ -12,6 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.validation.Valid;
 
@@ -57,14 +61,48 @@ public class BookController {
 
         return new ResponseEntity<BookBlob>(bookBlob,HttpStatus.OK);
     }
-    
+    @GetMapping("/print/{bookIds}")
+    public void test(@PathVariable String bookIds) {
+        StringTokenizer st = new StringTokenizer(bookIds, ",");
+        List<Long> list = new ArrayList<Long>();
+        while (st.hasMoreTokens()) {
+            list.add(Long.parseLong(st.nextToken()));
+        }
+        Iterator<Long> iterator = list.iterator();
 
+        while(iterator.hasNext()) {
+            Long element = iterator.next();
+            System.out.println( element );
+        }
+
+        System.out.println(bookIds);
+    }
+
+    @GetMapping("/printBooks/{bookIds}")
+    public List<Book> getBooksForPrint(@PathVariable String bookIds){
+        StringTokenizer st = new StringTokenizer(bookIds, ",");
+        List<Long> list = new ArrayList<Long>();
+        while (st.hasMoreTokens()) {
+            list.add(Long.parseLong(st.nextToken()));
+        }
+        Iterable<Long> iterableIds  = list;
+
+
+        return bookService.findBooksForPrint(iterableIds);
+    }
 
     @GetMapping("/all")
-    public Iterable<Book> getAllBooks(){return bookService.findAllBooks();}
+    public Iterable<Book> getAllBooks(@RequestParam(defaultValue = "0") Integer pageNo,
+                                      @RequestParam(defaultValue = "3") Integer pageSize,
+                                      @RequestParam(defaultValue = "id") String sortBy){
+
+        return bookService.findAllBooks(pageNo, pageSize, sortBy);
+    }
     
     @GetMapping("/allMyBooks")
-    public Iterable<Book> getAllBooksByUser(Principal principal){return bookService.findAllBooksByUser(principal.getName());}
+    public Iterable<Book> getAllBooksByUser(Principal principal){
+        return bookService.findAllBooksByUser(principal.getName());
+    }
     
     @GetMapping("/name/{bookName}")
     public Iterable<Book> getAllBooksByName(@PathVariable String bookName){

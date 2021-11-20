@@ -7,21 +7,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="kusers")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "Username needs to be an email")
+    //@Email(message = "Username needs to be an email")
+    @NotBlank(message ="Project Identifier is required")
+    @Size(min=6, max=8, message = "username must be 6 to 8 characters long")
+    @Column(updatable = false, unique = true)
     @NotBlank(message = "username is required")
-    @Column(unique = true)
     private String username;
     @NotBlank(message = "Please enter your full name")
     private String fullName;
